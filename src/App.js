@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+
+import { Link, Route, Routes} from 'react-router-dom';
 import './App.css';
+import Home from './components/Home';
+import Posts from './components/Posts';
+import Users from './components/Users';
+import Nav from './components/Navbar';
+import axios from "axios"
+import { useEffect, useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+ const [posts,setPost]=useState([]);
+ const [isError,setIsError]=useState("");
+const getApiData = () =>{
+ axios.get("https://jsonplaceholder.typicode.com/posts").then(res=>{
+  console.log('res',res.data)
+   setPost(res.data);
+ }).catch(err=>{
+  setIsError("Something went wrong",err);
+ })
+ 
 }
+useEffect(()=>{
+  getApiData();
+},[])
+
+  return (
+    
+   <>
+   
+     <Nav />
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="users" element={ <Users/> } />
+        <Route path="posts" element={ <Posts/> } />
+      </Routes>
+    
+      </>
+    
+  )
+        }
 
 export default App;
